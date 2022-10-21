@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
         name='dictator',
         display_name="Dictador Basico",
         app_sequence=['dictator', 'payment_info'],
-        num_demo_participants=4,
+        num_demo_participants=2,
     ),
     dict(
         name='real_effort_numbers',
@@ -17,8 +17,8 @@ SESSION_CONFIGS = [
     dict(
         name="matrices",
         display_name="Juego del Dictador Parrett",
-        num_demo_participants=4,
-        app_sequence=["real_effort", 'payment_info'],
+        num_demo_participants=2,
+        app_sequence=['consentimiento', 'intro', 'juegos', "real_effort", 'survey', 'payment_info'],
         task='matrix',
         attempts_per_puzzle=1,
     ),
@@ -45,7 +45,7 @@ LANGUAGE_CODE = 'es'
 
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'PEN'
-USE_POINTS = False
+USE_POINTS = True
 
 ROOMS = [
     dict(
@@ -68,3 +68,4 @@ Here are some oTree games.
 SECRET_KEY = '8280685766045'
 
 INSTALLED_APPS = ['otree']
+

@@ -1,5 +1,5 @@
 import time
-import statistics as st
+
 from otree import settings
 from otree.api import *
 
@@ -9,10 +9,7 @@ doc = """
 Real-effort tasks. The different tasks are available in task_matrix.py, task_transcription.py, etc.
 You can delete the ones you don't need. 
 """
-myList=[]
-lista=[0]
-monto=[0]
-kept=[0]
+
 
 def get_task_module(player):
     """
@@ -34,18 +31,12 @@ def get_task_module(player):
 
 
 class Constants(BaseConstants):
-    name_in_url = "transcription"
-    players_per_group = 2 ## dictador, en normal es None
+    name_in_url = "transcripcion"
+    players_per_group = None
     num_rounds = 1
+
     instructions_template = __name__ + "/instructions.html"
     captcha_length = 3
-
-    ####################################################
-    dictator_role = 'Jugador A'
-    agent_role = 'Jugador B'
-    ENDOWMENT = cu(100)
-
-    ####################################################
 
 
 class Subsession(BaseSubsession):
@@ -62,17 +53,16 @@ def creating_session(subsession: Subsession):
         session.params[param] = session.config.get(param, defaults[param])
 
 
-#class Group(BaseGroup):
-#    pass
+class Group(BaseGroup):
+    pass
 
 
 class Player(BasePlayer):
     iteration = models.IntegerField(initial=0)
     num_trials = models.IntegerField(initial=0)
     num_correct = models.IntegerField(initial=0)
-    premio = models.IntegerField(initial=0)
+    num_failed = models.IntegerField(initial=0)
 
-# cambiando variable num_failed a "premio"
 
 # puzzle-specific stuff
 
@@ -92,81 +82,7 @@ class Puzzle(ExtraModel):
     response_timestamp = models.FloatField()
     is_correct = models.BooleanField()
 
-##########################################################################################################
-##########################################################################################################
-##########################################################################################################
-##########################################################################################################
-class Group(BaseGroup):
-    kept = models.CurrencyField(
-        doc="""Amount dictator decided to keep for himself""",
-        min=0,
-        max=Constants.ENDOWMENT,
-        label="Le entregaré:",
-    )
 
-def set_payoffs(group: Group):
-    p1 = group.get_player_by_id(1)
-    p2 = group.get_player_by_id(2)
-    p1.payoff = 0       #premio (sea 50 o 100) - group.kept 
-    p2.payoff = 0       #group.kept
-
-
-class AgentPage(Page):
-    @staticmethod
-    def is_displayed(player):
-        return player.role == Constants.agent_role
-
-class ResultsWaitPage(WaitPage):
-    after_all_players_arrive = set_payoffs
-
-class MyWaitPage(WaitPage):
-    wait_for_all_groups=True
-
-
-class ResultsA(Page):
-    @staticmethod
-    def vars_for_template(player: Player):
-        player_b = player.group.get_player_by_id(1)
-        group = player.group
-        return dict(offer=player_b.premio - group.kept)
-
-    #Dictador
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 1
-
-class RolA(Page):
-
-    #Dictador
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 1
-
-class ResultsB(Page):
-    @staticmethod
-    def vars_for_template(player: Player):
-        player_b = player.group.get_player_by_id(1)
-        group = player.group
-        return dict(offer=player_b.premio - group.kept)
-
-     #Agente
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 2
-
-class RolB(Page):
-
-     #Agente
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 2
-    
-    
-
-##########################################################################################################
-##########################################################################################################
-##########################################################################################################
-##########################################################################################################
 def generate_puzzle(player: Player) -> Puzzle:
     """Create new puzzle for a player"""
     task_module = get_task_module(player)
@@ -198,7 +114,7 @@ def get_progress(player: Player):
     return dict(
         num_trials=player.num_trials,
         num_correct=player.num_correct,
-        premio=player.premio,
+        num_incorrect=player.num_failed,
         iteration=player.iteration,
     )
 
@@ -286,7 +202,7 @@ def play_game(player: Player, message: dict):
             if current.is_correct:
                 player.num_correct -= 1
             else:
-                player.premio -= 0
+                player.num_failed -= 1
 
         # check answer
         answer = message["answer"]
@@ -303,7 +219,7 @@ def play_game(player: Player, message: dict):
         if current.is_correct:
             player.num_correct += 1
         else:
-            player.premio += 0
+            player.num_failed += 1
         player.num_trials += 1
 
         retries_left = params["attempts_per_puzzle"] - current.attempts
@@ -341,74 +257,9 @@ class Game(Page):
         if not timeout_happened and not player.session.params['max_iterations']:
             raise RuntimeError("malicious page submission")
 
-    ################ CAMBIOS ###################
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 2
 
 class Results(Page):
-    ################ CAMBIOS ###################
-    #form_model = 'group'
-    #form_fields = ['kept']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 1
-
-    @staticmethod 
-    def vars_for_template(player: Player):
-        player_b = player.group.get_player_by_id(2)
-
-        output = {"b_num_trials": player_b.num_trials,
-                  "b_num_correct": player_b.num_correct}
-        myList.append(output["b_num_correct"])
-        print(myList)
-        return output
-
-class Choice(Page):
-    form_model = 'group'
-    form_fields = ['kept']
-    
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group == 1
+    pass
 
 
-    @staticmethod
-    def vars_for_template(player):
-        player_b = player.group.get_player_by_id(2)
-        
-
-        mediana=st.median(myList)
-        m=float(mediana)
-        
-
-        if (player_b.num_correct>mediana):
-            a="su <strong>Jugador B</strong> es parte del 50% <strong>superior</strong>, por lo que se les ha asignado el premio grande de"
-            monto[0]=100
-            player.premio=100
-            
-        elif(player_b.num_correct==mediana):
-            if(lista[0]==0):
-                a="su <strong>Jugador B</strong> es parte del 50% <strong>superior</strong>, por lo que se les ha asignado el premio grande de"
-                monto[0]=100
-                lista[0]=1
-                player.premio=100
-            else:
-                a="su <strong>Jugador B</strong> es parte del 50% <strong>inferior</strong>, por lo que se les ha asignado el premio pequeño de"
-                monto[0]=50
-                lista[0]=0
-                player.premio=50   
-        else:
-            a="su <strong>Jugador B</strong> es parte del 50% <strong>inferior</strong>, por lo que se les ha asignado el premio pequeño de"
-            monto[0]=50
-            player.premio=50
-
-    
-        return dict(
-            a=a,
-            b=monto
-        )
-
-page_sequence = [RolA,RolB,Game,ResultsWaitPage,MyWaitPage,Results,Choice,ResultsWaitPage,ResultsA,ResultsB]
+page_sequence = [Game, Results]

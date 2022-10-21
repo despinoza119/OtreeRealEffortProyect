@@ -3,23 +3,22 @@
 {% endblock %}
 
 {{ block title }}
-Tarea de Esfuerzo
+Real-effort task
 {{ endblock }}
 
 {{ block content }}
 <div class="d-flex flex-column align-items-center">
     <h3>
-        Usted es el <strong>{{player.role}}</strong> <br>
-        Intento <span id="iter-txt"></span>
+        Iteration <span id="iter-txt"></span>
     </h3>
-    <p>Aciertos: <span id="solved-txt"></span>. </p>
+    <p>Solved: <span id="solved-txt"></span>. Failed: <span id="failed-txt"></span>.</p>
     <img class="captcha m-1" id="captcha-img">
 
     <div class="input-group m-1">
         <input type="{{ input_type }}" id="answer-inp" class="form-control"
                placeholder="{{ placeholder }}"
                autocorrect="off" autocapitalize="off" spellcheck="false">
-        <button type="button" id="submit-btn" class="btn btn-outline-secondary">Enter</button>
+        <button type="button" id="submit-btn" class="btn btn-outline-secondary">Submit</button>
     </div>
 
     <p class="warn" id="warning-txt"></p>

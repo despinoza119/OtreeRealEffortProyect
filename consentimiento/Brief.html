@@ -1,0 +1,55 @@
+{{ block title }}Instrucciones{{ endblock }}
+{{ block content }}
+
+    <p>
+        Este es un experimento económico de toma de decisiones.
+        <br>
+        <br>
+        Se te asignará uno de dos roles de manera aleatoria: el rol de <strong>Jugador A</strong> o el de <strong>Jugador B</strong>.
+        Adicionalmente, se te emparejará con un jugador anónimo del rol contrario. Es decir, si a usted se le asigna el rol A, se le emparejará
+        con alguien del rol B y viceversa.
+        <br>
+        <br>
+        Si a usted le toca ser un jugador B, tendrá que jugar un juego que consiste en identificar la cantidad de flechas 
+        que apuntan hacia la derecha dentro de una matriz 4x5 (solo hay flechas apuntando hacia abajo y hacia la derecha). 
+        Una vez que haya contado el número de flechas que apuntan hacia la derecha, introdúzcalo en la casilla de texto debajo de la matriz y proceda a darle click al botón de enter. 
+        Inmediatamente le aparecerá una nueva matriz en la que tendrá que volver a repetir el ejercicio. 
+        Trate de responder de manera correcta la mayor cantidad de veces posibles dentro de un lapso de tiempo de 60 segundos.
+        <br>
+        <br>
+        Si a usted le toca ser un jugador A, primero tendrá que esperar que todos los jugadores B terminen la actividad.
+        <br>
+        <br>
+        Una vez que todos los jugadores B hayan terminado de jugar, el programa comparará los puntajes obtenidos por los participantes.
+        Luego, separará al 50% de jugadores B que obtuvieron mayor puntaje del otro 50% que obtuvo menor puntaje.
+        <br>
+        <br>
+        Al 50% superior de jugadores B y a sus parejas (Jugador A) se les asignará un premio mayor de 100 puntos. Mientras que,
+        al 50% inferior de los jugadores B y sus parejas, se les asignará un premio menor de 50 puntos. 
+        <br>
+        <br>
+        Esta información se le presentará a los jugadores A, y estos tendrán la opción de repartir el premio total asignado a través de una decisión.
+        Se les mostrará una casilla en la que pueden introducir un número (entre 0 y el premio obtenido por el jugador B). Dicho monto elegido se le repartirá
+        a la pareja (jugador B). El resto del premio se lo quedará el jugador A.
+        <br>
+        <br>
+        Esta misma dinámica se repetirá hasta que se completen 5 rondas. De las cuáles una será elegida aleatoriamente para determinar los pagos de los participantes.
+        Cada punto en esta actividad equivale a 10 céntimos de sol. Es decir que los 50 puntos del premio menor equivalen a 5 soles y los 100 puntos del premio mayor
+        equivalen a 10 soles. Montos que serán repartidos por el Jugador A entre él y su pareja (Jugador B asignado).
+        <br>
+        <br>
+        Después de haberse finalizado las 5 rondas, los participantes procederán a realizar una breve encuesta con datos personales y métodos de pago de preferencia.
+        y se finalizará la sesión después de que los organizadores realicemos las debidas transferencias de los pagos correspondientes.
+        <br>
+        <br>
+        <strong>A continuación se le harán preguntas para confirmar que se entendieron las instrucciones. Si considera que está listo 
+        para iniciar el juego presione el botón de "siguiente" (Tenga en cuenta que si le toca ser el Jugador B tendrá que 
+        empezar a resolver el juego de las flechas inmediatamente).</strong>
+        
+    </p>
+
+    {{ formfields }}
+
+    {{ next_button }}
+
+{{ endblock }}

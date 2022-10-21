@@ -1,14 +1,16 @@
 {{ block title }}
-Results
+Jugador A
 {{ endblock }}
 
 {{ block content }}
 <p>
-    Tu eres el  <strong>Jugador A</strong>. Elige con cuánto de la dotación te quedarás. <br>
-
-    Tu Jugador B intentó {{b_num_trials}} el rompecabeza, consiguió resolver {{b_num_correct}} correctamente.
+    A usted se le ha asignado el rol del <strong>Jugador A</strong>. <br>
     <br>
-    <strong>Hacer clic en el botón para continuar:</strong>
+    Su pareja asignada <strong>(Jugador B)</strong> ha finalizado la tarea y logró resolver el rompecabezas 
+    {{b_num_correct}} veces de {{b_num_trials}} intentos.
+    <br>
+    <br>
+    <strong>Haga clic en el botón para continuar</strong>
 </p>
 {{ next_button }}
 {{ endblock }}
