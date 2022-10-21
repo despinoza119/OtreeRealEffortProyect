@@ -1,0 +1,20 @@
+{{ block title }}¡Bienvenidos!{{ endblock }}
+{{ block content }}
+
+    <p>
+        <strong>Juego de las matrices</strong>
+        <br>
+        <br>
+        tendrá que jugar un juego que consiste en identificar la cantidad de flechas 
+        que apuntan hacia la derecha dentro de una matriz 4x5 (solo hay flechas apuntando hacia abajo y hacia la derecha). 
+        Una vez que haya contado el número de flechas que apuntan hacia la derecha, introdúzcalo en la casilla de texto debajo de la matriz y proceda a darle click al botón de enter. 
+        Inmediatamente le aparecerá una nueva matriz en la que tendrá que volver a repetir el ejercicio. 
+        Trate de responder de manera correcta la mayor cantidad de veces posibles dentro de un lapso de tiempo de 60 segundos.
+       
+    </p>
+
+    {{ formfields }}
+
+    {{ next_button }}
+
+{{ endblock }}

@@ -2,7 +2,7 @@ from otree.api import *
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'survey'
+    NAME_IN_URL = 'Survey'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
@@ -16,12 +16,57 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    age = models.IntegerField(label='What is your age?', min=13, max=125)
+    age = models.IntegerField(label='¿Cuál es su edad?', min=13, max=125)
+    crt_cci = models.StringField( 
+        label='''
+        Introduzca su número de cuenta interbancaria'''
+    )
+    crt_celular = models.StringField( 
+        label='''
+        Introduzca su número de celular asociado a yape/plin'''
+    )
     gender = models.StringField(
-        choices=[['Male', 'Male'], ['Female', 'Female']],
-        label='What is your gender?',
+        choices=[['Hombre', 'Hombre'], ['Mujer', 'Mujer'], ['Otro', 'Otro']],
+        label='¿Cuál es su género?',
         widget=widgets.RadioSelect,
     )
+    payment = models.StringField(
+        choices=[['Yape', 'Yape'], ['Plin', 'Plin'], ['Transferencia', 'Transferencia']],
+        label='¿Cuál método de pago prefiere?',
+        widget=widgets.RadioSelect,
+    )
+    civil = models.StringField(
+        choices=[['Soltero/a', 'Soltero/a'], ['Casado/a', 'Casado/a'], ['Viudo/a', 'Viudo/a'], ['Divorciado/a', 'Divorciado/a']],
+        label='¿Cuál es su estado civil?',
+        widget=widgets.RadioSelect,
+    )
+    ingresos = models.StringField(
+        choices=[['Si', 'Si'], ['No', 'No']],
+        label='¿Actualmente tiene alguna fuente de ingresos?',
+        widget=widgets.RadioSelect,
+    )
+    mesero = models.StringField(
+        choices=[['Si', 'Si'], ['No', 'No']],
+        label='¿Alguna vez ha trabajado de mesero/a en un restaurante?',
+        widget=widgets.RadioSelect,
+    )
+
+    educacion = models.IntegerField(
+        choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
+        label='¿Qué ciclo de la carrera se encuentra cursando? (Si actualmente no está estudiando, coloque 0)',
+    )
+    norma = models.StringField(
+        choices=[['0-5%', '0-5%'], ['6-10%', '6-10%'], ['11-15%', '11-15%'], ['16-20%', '16-20%'], ['más de 20%', 'más de 20%']], 
+        label='¿Qué porcentaje de la cuenta considera apropiado dejar como propina en un restaurante?',
+        widget=widgets.RadioSelect,
+    )   
+    residencia = models.StringField(
+        choices=[['Lima Metropolitana', 'Lima Metropolitana'], ['Lima Provincia', 'Lima Provincia'], ['Resto del Perú', 'Resto del Perú'], ['Extranjero', 'Extranjero'] ], 
+        label='Lugar de residencia',
+        widget=widgets.RadioSelect,
+    )
+
+
     crt_bat = models.IntegerField(
         label='''
         A bat and a ball cost 22 dollars in total.
@@ -48,7 +93,11 @@ class Player(BasePlayer):
 # PAGES
 class Demographics(Page):
     form_model = 'player'
-    form_fields = ['age', 'gender']
+    form_fields = ['age', 'gender', 'educacion', 'ingresos', 'mesero', 'norma']
+
+class Infopagos(Page):
+    form_model = 'player'
+    form_fields = ['payment', 'crt_celular', 'crt_cci']
 
 
 class CognitiveReflectionTest(Page):
@@ -56,4 +105,5 @@ class CognitiveReflectionTest(Page):
     form_fields = ['crt_bat', 'crt_widget', 'crt_lake']
 
 
-page_sequence = [Demographics, CognitiveReflectionTest]
+page_sequence = [Demographics, Infopagos]
+
